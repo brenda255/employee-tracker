@@ -1,15 +1,15 @@
--- INSERT INTO department (name)
--- VALUES  ('finance'),
---         ('legal'),
---         ('sales'),
---         ('engineering');
+INSERT INTO department (name)
+VALUES  ('Finance'),
+        ('Legal'),
+        ('Sales'),
+        ('Engineering');
 
 
--- INSERT INTO role (title, department_id, salary )
--- VALUES  ('accountant', 1, 1.2),
---         ('lawyer', 2, 3.0),
---         ('salesman', 3, 4.0),
---         ('software engineer', 4, 5.0 );
+INSERT INTO role (title, department_id, salary )
+VALUES  ('Accountant', 1, 1.2),
+        ('Lawyer', 2, 3.0),
+        ('Salesman', 3, 4.0),
+        ('Software engineer', 4, 5.0 );
 
 
 

@@ -1,42 +1,8 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
-// const markdown = require('./utils/generateMarkdown.js');
-const mysql = require('mysql2');
-// const prompts = require('prompts');
-const table = require("console.table");
-// const express = require('express');
+const connection = require('./db/connection')
 
+require("console.table");
 
-const PORT = process.env.PORT || 3001;
-// const app = express();
-
-
-// middleware
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
-
-//connect to database
-const connection = mysql.createConnection(
-    {
-      host: 'localhost',
-      user: 'root',
-      password: 'process.env.DB_PASSWORD',
-      database: 'employee_db',
-    },
-    console.log(`Connected to the employee_db database.`)
-  );
-
-  connection.connect(function(err){
-    if (err) throw err;
-    console.log("connection as id" + "connection.threadId" + "\n");
-    askQuestions();
-
-// Query database
-connection.query('SELECT * FROM employees', function (err, results) {
-    console.log(results);
-  });
-  
-})
 const askQuestions = () => {
     inquirer.prompt ([
       {
@@ -55,27 +21,27 @@ const askQuestions = () => {
         ],
 }])
 .then(answers => {
-    console.log(answers.choice);
-    switch (answers.choice) {
-     case "view all employees":
+    console.log(answers.choices);
+    switch (answers.choices) {
+     case 'View all employees':
         viewEmployee()
         break;   
-        case "view all departments":
+        case 'View all departments':
             viewDepartment()
             break;   
-            case "view all roles":
+            case 'View all roles':
                 viewRole()
                 break;  
-                case "add a department":
+                case 'Add a department':
                     addDepartment()
                     break;
-                    case "add a role":
+                    case 'Add a role':
                         addRole()
                         break;
-                        case "add an employee":
+                        case 'Add an employee':
                             addEmployee()
                             break;
-                            case "update employee role":
+                            case 'Update employee role':
                                 updateRole()
                                 break;  
 
@@ -84,18 +50,32 @@ connection.end()
 break;
 }})}
 
+askQuestions();
+
 const viewEmployee = () => {
-  connection.query("SELECT * FROM employee", function (err,data) {
+  connection.promise().query("SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id")
+  .then(function([data]){
+    console.table(data);
+    askQuestions();
+  })
+
+
+}
+
+const viewDepartment= () => {
+  connection.promise().query("SELECT * FROM department")
+  .then(function ([data]) {
     console.table(data);
     askQuestions();
 })
 }
 
-const viewDepartment= () => {
-  connection.query("SELECT * FROM department", function (err, data) {
-    console.table(data);
-    askQuestions();
-})
+const viewRole = () => {
+    connection.promise().query("SELECT role.id, role.title, role.salary, department.name AS department_name FROM role LEFT JOIN department ON role.department_id = department.id ")
+    .then(function([data]){
+      console.table(data);
+      askQuestions();
+    })
 }
 
 const addEmployee= () => {
@@ -185,17 +165,3 @@ const updateEmployeeRole= () => {
   })
 
 }
-
-
-
-
-
-
-  // // Default response for not found
-  // app.use((req, res) => {
-  //   res.status(404).end();
-  // });
-  
-  // app.listen(PORT, () => {
-  //   console.log(`Server running on port ${PORT}`);
-  // });
