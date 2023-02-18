@@ -9,6 +9,4 @@
   To help employers view information about their employees.
 
   ## Visual
- ![](./db/MYSQL%20vid.mp4)
  https://user-images.githubusercontent.com/115198624/219826632-7feb6bd7-97b3-45b0-9154-78ff69199eda.mp4
-
